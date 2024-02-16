@@ -11,11 +11,7 @@ async def handler(websocket):
         try:
             event = await websocket.recv()
             print(event)
-            try:
-                event = json.loads(event)
-            except:
-                pass
-            event_type = event if type(event) == str else json.loads(event).get("type")
+            event_type = json.loads(event).get("type")
             if event_type == "ready" and not CONNECTED: # check to ensure at least ONE client is connected
                 print("Client Connected")
                 CONNECTED = True

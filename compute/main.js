@@ -35,12 +35,11 @@ function receiveData(status, websocket) {
     status.classList.remove("await");
     status.classList.add("compute");
     setTimeout(() => {
-      
+      status.textContent = "Done!";
+      status.classList.remove("compute");
+      status.classList.add("done");
     }, 2000);
     let result = computeData(event.data);
-    status.textContent = "Done!";
-    status.classList.remove("compute");
-    status.classList.add("done");
     console.log(result)
     result = {
       data: result,
