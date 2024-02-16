@@ -2,6 +2,7 @@ import asyncio
 import websockets
 import json
 
+global liveData 
 liveData = 0
 
 async def handler(websocket):
@@ -9,10 +10,10 @@ async def handler(websocket):
         event = await websocket.recv()
         print(event)
         if event == "ready":
-            for _ in range(10):
-                liveData += 1
+            for i in range(10):
+                i += 1
                 event = {
-                    "Live Data Stream: " + str(liveData) + " "
+                    "Live Data Stream: " + str(i) + " "
                 }
                 
                 await websocket.send(json.dumps(event))
