@@ -2,18 +2,28 @@ import asyncio
 import websockets
 import json
 
+liveData = 0
 
 async def handler(websocket):
     async for message in websocket:
         event = await websocket.recv()
         print(event)
         if event == "ready":
-            for i in range(10):
+            for _ in range(10):
+                liveData += 1
                 event = {
-                    "data": str(i) + " answer to life"
+                    "Live Data Stream: " + str(liveData) + " "
+                }
+                
+                await websocket.send(json.dumps(event))
+                await asyncio.sleep(1)
+        if event == "change location":
+                event = {
+                    "Compute interrupted, migrated to new vehicle"
                 }
                 await websocket.send(json.dumps(event))
                 await asyncio.sleep(1)
+                websocket.send("change location")
 
 
 async def main():

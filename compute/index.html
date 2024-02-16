@@ -3,11 +3,46 @@
   <head>
     <title>Phone</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgADpiZ00FXmPbDcR4L6t7b06WFI0u3C0"></script>
   </head>
   <body>
     <div class="status"></div>
     <button class="btn">Ready?</button>
+    <button class="changeLocBtn">Change Location?</button>
+    <div id="map"></div>
     <div class="data"></div>
     <script src="main.js" type="module"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgADpiZ00FXmPbDcR4L6t7b06WFI0u3C0&callback=initMap"></script>
   </body>
 </html>
+
+<script>
+  function initMap() {
+      var EFHQ = {lat: 48.8583, lng: 2.2923};
+      var car1 = {lat: 48.9583, lng: 2.2923};
+      var car2 = {lat: 48.7583, lng: 2.2923};
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: EFHQ
+      });
+
+      var EFHQ = new google.maps.Marker({
+          position: EFHQ,
+          map: map,
+          title: 'Entrepreneur First Headquarters'
+      });
+
+      var car1 = new google.maps.Marker({
+          position: car1,
+          map: map,
+          title: 'Car 1'
+      });
+
+      var car2 = new google.maps.Marker({
+          position: car2,
+          map: map,
+          title: 'Car 2'
+      });
+  }
+</script>

@@ -6,10 +6,12 @@ window.addEventListener("DOMContentLoaded", () => {
   status.textContent = "Awaiting...";
   status.classList.add("await");
 
-  const websocket = new WebSocket("ws://localhost:8001/");
+  const websocket = new WebSocket("ws:/192.168.1.62:8001/");
 
   const button = document.querySelector(".btn");
+  const changeLocButton = document.querySelector(".changeLocBtn");
   sendReady(button, websocket);
+  sendChangeLoc(changeLocButton, websocket);
   receiveData(status, websocket);
 });
 
@@ -17,6 +19,13 @@ function sendReady(button, websocket) {
   button.addEventListener("click", ({ target }) => {
     websocket.send("ready");
   });
+}
+
+function sendChangeLoc(button, websocket) {
+  button.addEventListener("click", ({ target }) => {
+    websocket.send("change location");
+  });
+  
 }
 
 function receiveData(status, websocket) {
