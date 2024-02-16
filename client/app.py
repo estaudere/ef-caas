@@ -2,30 +2,37 @@ import asyncio
 import websockets
 import json
 
-global liveData 
-liveData = 0
+global CONNECTED
+CONNECTED = False
 
 async def handler(websocket):
-    async for message in websocket:
-        event = await websocket.recv()
-        print(event)
-        if event == "ready":
-            for i in range(10):
-                i += 1
+    global CONNECTED
+    while True:
+        try:
+            event = await websocket.recv()
+            print(event)
+            event_type = json.loads(event).get("type")
+            if event_type == "ready" and not CONNECTED: # check to ensure at least ONE client is connected
+                print("Client Connected")
+                CONNECTED = True
+                user_input = input("Command: ")
                 event = {
-                    "Live Data Stream: " + str(i) + " "
+                    "data":  user_input
                 }
                 
                 await websocket.send(json.dumps(event))
-                await asyncio.sleep(1)
-        if event == "change location":
-                event = {
-                    "Compute interrupted, migrated to new vehicle"
-                }
-                await websocket.send(json.dumps(event))
-                await asyncio.sleep(1)
-                websocket.send("change location")
+            elif event_type == "ready" and CONNECTED:
+                pass
 
+            if event_type == "result":
+                print(json.loads(event).get("data"))
+            if event == "change location":
+                pass  
+        except websockets.ConnectionClosed:
+            # handle moving to new thread
+            print("Connection Closed")
+            CONNECTED = False
+            break
 
 async def main():
     async with websockets.serve(handler, "", 8001):

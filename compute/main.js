@@ -17,13 +17,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function sendReady(button, websocket) {
   button.addEventListener("click", ({ target }) => {
-    websocket.send("ready");
+    websocket.send(JSON.stringify({ type: "ready" }));
   });
 }
 
 function sendChangeLoc(button, websocket) {
   button.addEventListener("click", ({ target }) => {
-    websocket.send("change location");
+    websocket.close();
   });
   
 }
@@ -34,11 +34,19 @@ function receiveData(status, websocket) {
     status.textContent = "Computing...";
     status.classList.remove("await");
     status.classList.add("compute");
+    setTimeout(() => {
+      
+    }, 2000);
     let result = computeData(event.data);
     status.textContent = "Done!";
     status.classList.remove("compute");
     status.classList.add("done");
-    websocket.send(JSON.stringify({ result }));
+    console.log(result)
+    result = {
+      data: result,
+      type: "result"
+    }
+    websocket.send(JSON.stringify(result));
   });
 }
 
@@ -46,7 +54,8 @@ function receiveData(status, websocket) {
 function computeData(data) {
   // update UI with data
   const data_container = document.querySelector(".data");
-  data_container.textContent = data + " = 42";
+  let result = eval(data);
+  data_container.textContent = result;
   // do something with data
-  return 42;
+  return result;
 }
