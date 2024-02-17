@@ -26,6 +26,8 @@ function sendChangeLoc(button, websocket) {
     websocket.close();
   });
   
+  const data_container = document.querySelector(".data");
+  data_container.textContent = "Connected!"
 }
 
 function receiveData(status, websocket) {
